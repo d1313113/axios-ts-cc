@@ -1,4 +1,4 @@
-import { isDate, isObject } from './util'
+import { isDate, isPlainObject } from './util'
 
 /**
  * 对url参数进行编码,针对部分特殊字符进行还原
@@ -53,7 +53,7 @@ export function buildURL(url: string, params?: any): string {
       // 处理Date类型
       if (isDate(val)) {
         val = val.toISOString()
-      } else if (isObject(val)) {
+      } else if (isPlainObject(val)) {
         // 处理对象
         val = JSON.stringify(val)
       }
