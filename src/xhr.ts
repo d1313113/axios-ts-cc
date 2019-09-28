@@ -21,6 +21,12 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       if (request.readyState !== 4) {
         return
       }
+
+      // 网络超时/网络错误
+      if (request.status === 0) {
+        return
+      }
+
       const responseHeaders = parseHeaders(request.getAllResponseHeaders())
       const responseData = request.responseType !== 'text' ? request.response : request.responseText
 
@@ -33,7 +39,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
         request
       }
 
-      resolve(response)
+      handleResponse(response)
     }
 
     request.onerror = function handleError() {
@@ -51,6 +57,14 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
         request.setRequestHeader(name, headers[name])
       }
     })
+
+    function handleResponse(response: AxiosResponse): void {
+      if (response.status >= 200 && response.status < 300) {
+        resolve(response)
+      } else {
+        reject(new Error(`Request failed with status code ${response.status}`))
+      }
+    }
 
     request.send(data)
   })
