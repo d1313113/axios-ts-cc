@@ -2,7 +2,7 @@ import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types'
 import xhr from './xhr'
 import { buildURL } from '../helpers/url'
 import { transformRequest, transformResponse } from '../helpers/data'
-import { processHeaders } from '../helpers/headers'
+import { flattenHeaders, processHeaders } from '../helpers/headers'
 
 export default function axios(config: AxiosRequestConfig): AxiosPromise {
   processConfig(config)
@@ -14,6 +14,7 @@ function processConfig(config: AxiosRequestConfig): void {
   // 处理headers早于data,不然data对象会被转成json
   config.headers = transformHeaders(config)
   config.data = transformRquestData(config)
+  config.headers = flattenHeaders(config.headers, config.method!)
 }
 
 function transformURL(config: AxiosRequestConfig): string {
