@@ -39,7 +39,7 @@ stratKeysDeepMerge.forEach(key => {
 
 export default function mergeConfig(
   defaultConfig: AxiosRequestConfig,
-  userConfig: AxiosRequestConfig
+  userConfig?: AxiosRequestConfig
 ): AxiosRequestConfig {
   if (!userConfig) {
     userConfig = {}
@@ -60,7 +60,7 @@ export default function mergeConfig(
   function mergeField(key: string): void {
     const strat = strats[key] || defaultStrat
 
-    config[key] = strat(defaultConfig[key], userConfig[key])
+    config[key] = strat(defaultConfig[key], userConfig![key])
   }
 
   return config
