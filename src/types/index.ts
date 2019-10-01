@@ -24,8 +24,8 @@ export interface AxiosRequestConfig {
   timeout?: number
   transformRequest?: AxiosTransformer | Array<AxiosTransformer>
   transformResponse?: AxiosTransformer | Array<AxiosTransformer>
-
   cancelToken?: CancelToken
+  withCredentials?: boolean
 
   [propName: string]: any
 }
