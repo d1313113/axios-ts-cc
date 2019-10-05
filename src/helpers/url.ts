@@ -84,8 +84,8 @@ export function buildURL(
   if (serializedParams) {
     // 处理hash
     const markIndex = url.indexOf('#')
-    if (markIndex > -1) {
-      url.slice(0, markIndex)
+    if (markIndex !== -1) {
+      url = url.slice(0, markIndex)
     }
     url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams
   }
@@ -116,7 +116,7 @@ function resolveURL(url: string): URLOrigin {
 }
 
 export function isAbsoluteURL(url: string): boolean {
-  return /(^[a-z][a-z\d\+\-\.]*:)?\/\//i.test(url)
+  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url)
 }
 
 export function combineURL(baseURL: string, relativeURL?: string): string {
