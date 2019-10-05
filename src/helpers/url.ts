@@ -1,4 +1,4 @@
-import { isDate, isPlainObject } from './util'
+import { isDate, isPlainObject, isURLSearchParmas } from './util'
 
 interface URLOrigin {
   protocol: string
@@ -30,46 +30,57 @@ function encode(val: string): string {
  * @param {*} params
  * @return {string} url
  */
-export function buildURL(url: string, params?: any): string {
+export function buildURL(
+  url: string,
+  params?: any,
+  paramsSerializer?: (params: any) => string
+): string {
   // 没有请求参数的话直接返回url
   if (!params) {
     return url
   }
 
-  // 定义参数key=val键值对数组
-  const parts: string[] = []
+  let serializedParams
 
-  // 遍历参数
-  Object.keys(params).forEach(key => {
-    const value = params[key]
-    // 对于null及undefined的val直接忽略
-    if (value === null || typeof value === 'undefined') {
-      return
-    }
-    let values = []
-    // 数组形式的,拼接成k[]=v&k[]=v
-    if (Array.isArray(value)) {
-      values = value
-      key += '[]'
-    } else {
-      values = [value]
-    }
-    values.forEach(val => {
-      // 处理Date类型
-      if (isDate(val)) {
-        val = val.toISOString()
-      } else if (isPlainObject(val)) {
-        // 处理对象
-        val = JSON.stringify(val)
+  if (paramsSerializer) {
+    serializedParams = paramsSerializer(params)
+  } else if (isURLSearchParmas(params)) {
+    serializedParams = params.toString()
+  } else {
+    // 定义参数key=val键值对数组
+    const parts: string[] = []
+
+    // 遍历参数
+    Object.keys(params).forEach(key => {
+      const value = params[key]
+      // 对于null及undefined的val直接忽略
+      if (value === null || typeof value === 'undefined') {
+        return
       }
-      // 将key与valencode
-      parts.push(`${encode(key)}=${encode(val)}`)
+      let values = []
+      // 数组形式的,拼接成k[]=v&k[]=v
+      if (Array.isArray(value)) {
+        values = value
+        key += '[]'
+      } else {
+        values = [value]
+      }
+      values.forEach(val => {
+        // 处理Date类型
+        if (isDate(val)) {
+          val = val.toISOString()
+        } else if (isPlainObject(val)) {
+          // 处理对象
+          val = JSON.stringify(val)
+        }
+        // 将key与valencode
+        parts.push(`${encode(key)}=${encode(val)}`)
+      })
     })
-  })
 
-  // 序列化参数
-  let serializedParams = parts.join('&')
-
+    // 序列化参数
+    serializedParams = parts.join('&')
+  }
   if (serializedParams) {
     // 处理hash
     const markIndex = url.indexOf('#')
