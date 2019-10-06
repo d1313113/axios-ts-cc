@@ -9,6 +9,7 @@ import {
 import dispatchRequest from './dispatchRequest'
 import InterceptorManager from './interceptorManager'
 import mergeConfig from './merge'
+import { buildURL, combineURL, isAbsoluteURL } from '../helpers/url'
 
 interface Interceptors {
   request: InterceptorManager<AxiosRequestConfig>
@@ -116,5 +117,13 @@ export default class Axios {
         data
       })
     )
+  }
+
+  getUri(config: AxiosRequestConfig) {
+    let { url, params, paramsSerializer, baseURL } = config
+    if (baseURL && !isAbsoluteURL(url!)) {
+      url = combineURL(baseURL, url)
+    }
+    return buildURL(url!, params, paramsSerializer)
   }
 }

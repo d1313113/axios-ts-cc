@@ -73,7 +73,7 @@ export function buildURL(
           // 处理对象
           val = JSON.stringify(val)
         }
-        // 将key与valencode
+        // 将key与val encode
         parts.push(`${encode(key)}=${encode(val)}`)
       })
     })
