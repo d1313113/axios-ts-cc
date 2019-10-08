@@ -9,7 +9,7 @@
   "files": [
     "dist"
   ],
-  "author": "cumelmell",
+  "author": "cumelmell <cumelmell@foxmail.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/d1313113/axios-ts-cc.git"
