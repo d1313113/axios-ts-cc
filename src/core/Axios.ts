@@ -6,7 +6,7 @@ import {
   RejectedFn,
   ResolvedFn
 } from '../types'
-import dispatchRequest from './dispatchRequest'
+import dispatchRequest, { transformURL } from './dispatchRequest'
 import InterceptorManager from './interceptorManager'
 import mergeConfig from './merge'
 import { buildURL, combineURL, isAbsoluteURL } from '../helpers/url'
@@ -119,11 +119,8 @@ export default class Axios {
     )
   }
 
-  getUri(config: AxiosRequestConfig) {
-    let { url, params, paramsSerializer, baseURL } = config
-    if (baseURL && !isAbsoluteURL(url!)) {
-      url = combineURL(baseURL, url)
-    }
-    return buildURL(url!, params, paramsSerializer)
+  getUri(config?: AxiosRequestConfig): string {
+    config = mergeConfig(this.defaults, config)
+    return transformURL(config)
   }
 }
