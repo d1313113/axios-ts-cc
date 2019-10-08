@@ -1,6 +1,6 @@
 {
   "name": "axios-ts-cc",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "use TypeScript refactor axios",
   "keywords": [],
   "main": "dist/axios-ts-cc.umd.js",
